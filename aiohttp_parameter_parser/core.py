@@ -107,11 +107,6 @@ class ParameterView(web.View):
                        min_value: Optional[int] = None,
                        max_value: Optional[int] = None,
                        choices: Optional[Iterable] = None) -> Union[str, int, None]:
-        if is_string and is_int:
-            raise ConfigError(
-                "Invalid query parameter configuration: exactly one flag "
-                "in (is_int, is_string) should be True",
-            )
         if is_int:
             is_string = False
 
