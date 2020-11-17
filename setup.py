@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='aiohttp-parameter-parser',
-    version='0.1.2',
+    version='0.1.3',
     description='Declare and validate HTTP query and path parameters in aiohttp',
     long_description=long_description,
     long_description_content_type="text/markdown",
