@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='aiohttp-parameter-parser-isvinogradov',
+    name='aiohttp-parameter-parser',
     version='0.1',
     description='Declare and validate HTTP query and path parameters in aiohttp',
     long_description=long_description,
