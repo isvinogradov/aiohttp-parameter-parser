@@ -38,6 +38,7 @@ class ParameterView(web.View):
                         name_in_request: str,
                         *,
                         required: bool = False,
+                        ignore_errors: bool = False,
                         default: Any = None,
                         is_array: bool = False,
                         is_string: bool = True,
@@ -93,12 +94,15 @@ class ParameterView(web.View):
                 choices=choices,
             )
         except ValidationError as e:
+            if ignore_errors:
+                return default
             self.validation_error_handler(e.msg)
 
     def path_parameter(self,
                        name_in_path: str,
                        *,
                        required: bool = False,
+                       ignore_errors: bool = False,
                        default: Any = None,
                        is_string: bool = True,
                        is_int: bool = False,
@@ -125,6 +129,8 @@ class ParameterView(web.View):
                 choices=choices,
             )
         except ValidationError as e:
+            if ignore_errors:
+                return default
             self.validation_error_handler(e.msg)
 
     def _parse_parameter(self,
