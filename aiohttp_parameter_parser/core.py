@@ -187,7 +187,8 @@ class ParameterView(web.View):
                                            max_value: int = None,
                                            min_length: int = None,
                                            max_length: int = None,
-                                           choices: Optional[Iterable] = None):
+                                           choices: Optional[Iterable] = None,
+                                           **_):
         parsed_value = input_value
 
         # perform value conversion
