@@ -18,11 +18,17 @@ class ExampleView(ParameterView):
             "parameter_name_in_request",
             required=True,
             is_array=True,
+            max_items=6,  # len() restriction for list
             is_int=True,
+            max_value=1337,  # maximum allowed item value
         )
-        # If provided parameter is of wrong type or missing, 
-        # a default HTTP 400 response is returned to client.
-
+        # If provided parameter is of wrong type or missing, a default 
+        # HTTP 400 response is returned to client.
+        
+        my_str = self.path_parameter(  # default type for parsed parameter is str
+            "a_string_parameter_name",
+            choices=["foo", "bar", "baz"],  # enum
+        )
         return web.json_response({"received_param": my_array_of_ints})
 ```
 
