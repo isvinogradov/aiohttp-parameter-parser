@@ -34,27 +34,29 @@ class ParameterView(web.View):
         """
         raise web.HTTPBadRequest(text=msg)
 
-    def query_parameter(self,
-                        name_in_request: str,
-                        *,
-                        required: bool = False,
-                        ignore_errors: bool = False,
-                        default: Any = None,
-                        is_array: bool = False,
-                        is_string: bool = True,
-                        is_int: bool = False,
-                        is_decimal: bool = False,
-                        is_date: bool = False,
-                        is_bool: bool = False,
-                        min_value: Optional[int] = None,
-                        max_value: Optional[int] = None,
-                        min_length: Optional[int] = None,
-                        max_length: Optional[int] = None,
-                        min_items: Optional[int] = None,
-                        max_items: Optional[int] = None,
-                        choices: Optional[Iterable] = None,
-                        choices_are_case_insensitive: bool = False,
-                        choices_mapping: Optional[Mapping] = None) -> validated_query_parameter:
+    def query_parameter(
+            self,
+            name_in_request: str,
+            *,
+            required: bool = False,
+            ignore_errors: bool = False,
+            default: Any = None,
+            is_array: bool = False,
+            is_string: bool = True,
+            is_int: bool = False,
+            is_decimal: bool = False,
+            is_date: bool = False,
+            is_bool: bool = False,
+            min_value: Optional[int] = None,
+            max_value: Optional[int] = None,
+            min_length: Optional[int] = None,
+            max_length: Optional[int] = None,
+            min_items: Optional[int] = None,
+            max_items: Optional[int] = None,
+            choices: Optional[Iterable] = None,
+            choices_are_case_insensitive: bool = False,
+            choices_mapping: Optional[Mapping] = None,
+    ) -> validated_query_parameter:
         valid_config = (is_int + is_decimal + is_date + is_bool) <= 1
         if not valid_config:
             raise ConfigError(
@@ -92,25 +94,29 @@ class ParameterView(web.View):
                 min_items=min_items,
                 max_items=max_items,
                 choices=choices,
+                choices_mapping=choices_mapping,
             )
         except ValidationError as e:
             if ignore_errors:
                 return default
             self.validation_error_handler(e.msg)
 
-    def path_parameter(self,
-                       name_in_path: str,
-                       *,
-                       required: bool = False,
-                       ignore_errors: bool = False,
-                       default: Any = None,
-                       is_string: bool = True,
-                       is_int: bool = False,
-                       min_length: Optional[int] = None,
-                       max_length: Optional[int] = None,
-                       min_value: Optional[int] = None,
-                       max_value: Optional[int] = None,
-                       choices: Optional[Iterable] = None) -> Union[str, int, None]:
+    def path_parameter(
+            self,
+            name_in_path: str,
+            *,
+            required: bool = False,
+            ignore_errors: bool = False,
+            default: Any = None,
+            is_string: bool = True,
+            is_int: bool = False,
+            min_length: Optional[int] = None,
+            max_length: Optional[int] = None,
+            min_value: Optional[int] = None,
+            max_value: Optional[int] = None,
+            choices: Optional[Iterable] = None,
+            choices_mapping: Optional[Mapping] = None,
+    ) -> Union[str, int, None]:
         if is_int:
             is_string = False
 
@@ -127,6 +133,7 @@ class ParameterView(web.View):
                 min_value=min_value,
                 max_value=max_value,
                 choices=choices,
+                choices_mapping=choices_mapping,
             )
         except ValidationError as e:
             if ignore_errors:
@@ -175,21 +182,24 @@ class ParameterView(web.View):
             **kwargs,
         )
 
-    def _convert_and_validate_single_value(self,
-                                           input_value: str,
-                                           name_in_request: str,
-                                           *,
-                                           is_string: bool = True,
-                                           is_int: bool = False,
-                                           is_decimal: bool = False,
-                                           is_date: bool = False,
-                                           is_bool: bool = False,
-                                           min_value: int = None,
-                                           max_value: int = None,
-                                           min_length: int = None,
-                                           max_length: int = None,
-                                           choices: Optional[Iterable] = None,
-                                           **_):
+    def _convert_and_validate_single_value(
+            self,
+            input_value: str,
+            name_in_request: str,
+            *,
+            is_string: bool = True,
+            is_int: bool = False,
+            is_decimal: bool = False,
+            is_date: bool = False,
+            is_bool: bool = False,
+            min_value: int = None,
+            max_value: int = None,
+            min_length: int = None,
+            max_length: int = None,
+            choices: Optional[Iterable] = None,
+            choices_mapping: Optional[Mapping] = None,
+            **_,
+    ):
         parsed_value = input_value
 
         # perform value conversion
@@ -254,10 +264,13 @@ class ParameterView(web.View):
                     )
 
         # validate choices
-        if choices and parsed_value not in choices:
-            raise ValidationError(
-                f"Possible values for parameter <{name_in_request}> are "
-                f"{'/'.join(str(x) for x in choices)}",
-            )
+        if choices:
+            if parsed_value not in choices:
+                raise ValidationError(
+                    f"Possible values for parameter <{name_in_request}> are "
+                    f"{'/'.join(str(x) for x in choices)}",
+                )
+            if choices_mapping:
+                parsed_value = choices_mapping[parsed_value]
 
         return parsed_value
