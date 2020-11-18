@@ -12,7 +12,7 @@ from aiohttp import web
 from aiohttp_parameter_parser import ParameterView
 
 
-class ExampleHandler(ParameterView):
+class ExampleView(ParameterView):
     async def get(self) -> web.Response:
         my_array_of_ints = self.query_parameter(
             "parameter_name_in_request",
@@ -33,7 +33,7 @@ from aiohttp import web
 from aiohttp_parameter_parser import ParameterView
 
 
-class CustomErrorResponseHandler(ParameterView):
+class CustomErrorResponseView(ParameterView):
     def validation_error_handler(self, msg: str) -> web.Response:
         # just override this method of base class
         # 'msg' is a human-readable explanation of validation error
