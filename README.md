@@ -1,5 +1,7 @@
 # aiohttp-parameter-parser
 
+[![pypi](https://img.shields.io/pypi/v/aiohttp-parameter-parser.svg)](https://pypi.python.org/pypi/aiohttp-parameter-parser)
+
 Declare and validate HTTP query and path parameters in `aiohttp` views.
 Currently only path and URL query parameter location are supported.
 

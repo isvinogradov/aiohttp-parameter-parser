@@ -16,6 +16,9 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Internet",
     ],
     packages=find_packages(),
     install_requires=['pytz', 'aiohttp'],  # external packages as dependencies
