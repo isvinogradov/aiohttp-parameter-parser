@@ -14,7 +14,7 @@ from aiohttp_parameter_parser import ParameterView
 
 class ExampleView(ParameterView):
     async def get(self) -> web.Response:
-        my_array_of_ints = self.query_parameter(
+        my_list_of_ints = self.query_parameter(
             "parameter_name_in_request",
             required=True,
             is_array=True,
@@ -29,10 +29,14 @@ class ExampleView(ParameterView):
             "a_string_parameter_name",
             choices=["foo", "bar", "baz"],  # enum
         )
-        return web.json_response({"received_param": my_array_of_ints})
+        return web.json_response({
+            "received_array_of_ints": my_list_of_ints,
+            "received_str": my_str,
+        })
 ```
 
-How to return custom response when parameter validation fails:
+Sometimes you want to return custom error response instead of default HTTP 400.
+Here's an example how to raise custom exception if validation fails: 
 ```python
 from aiohttp import web
 
