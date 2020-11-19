@@ -5,33 +5,49 @@
 Declare and validate HTTP query and path parameters in `aiohttp` views.
 Currently only path and URL query parameter location are supported.
 
-Basic usage:
+Basic usage examples:
 ```python
+from datetime import datetime
+from typing import Optional
+
+import pytz
 from aiohttp import web
 
 from aiohttp_parameter_parser import ParameterView
 
 
 class ExampleView(ParameterView):
+    date_format = "%d-%m-%Y"  # custom date format for date parameters
+    tz = pytz.timezone("Europe/Berlin")  # custom timezone for date parameters
+
     async def get(self) -> web.Response:
-        my_list_of_ints = self.query_parameter(
+        my_tuple_of_ints: tuple[int, ...] = self.query_parameter(
             "parameter_name_in_request",
             required=True,
             is_array=True,
             max_items=6,  # len() restriction for list
             is_int=True,
-            max_value=1337,  # maximum allowed item value
+            max_value=1337,  # maximum allowed value for array items
         )
         # If provided parameter is of wrong type or missing, a default 
         # HTTP 400 response is returned to client.
         
-        my_str = self.path_parameter(  # default type for parsed parameter is str
+        my_str: Optional[str] = self.path_parameter(
             "a_string_parameter_name",
+            # str is a default type for parsed parameter, so no 
+            # `is_string=True` flag can be used
             choices=["foo", "bar", "baz"],  # enum
         )
+
+        my_datetime: Optional[datetime] = self.query_parameter(
+            "my_datetime_parameter",
+            is_date=True,
+        )  # will use custom timezone and date format provided above
+
         return web.json_response({
-            "received_array_of_ints": my_list_of_ints,
+            "received_array_of_ints": my_tuple_of_ints,
             "received_str": my_str,
+            "received_datetime": my_datetime.strftime(self.date_format),
         })
 ```
 
