@@ -1,11 +1,12 @@
-# aiohttp-parameter-parser
+# URL query string / path parameter parser and validator for `aiohttp` views
 
 [![pypi](https://img.shields.io/pypi/v/aiohttp-parameter-parser.svg)](https://pypi.python.org/pypi/aiohttp-parameter-parser)
 
-Declare and validate HTTP query and path parameters in `aiohttp` views.
+Declare and validate HTTP query and path parameters in `aiohttp` views. 
+Receive intended types instead of default `str`.  
 Currently only path and URL query parameter location are supported.
 
-Basic usage examples:
+### Basic usage examples:
 ```python
 from datetime import datetime
 from typing import Optional
@@ -51,6 +52,7 @@ class ExampleView(ParameterView):
         })
 ```
 
+### Custom error response example
 Sometimes you want to return custom error response instead of default HTTP 400.
 Here's an example how to raise custom exception if validation fails: 
 ```python
