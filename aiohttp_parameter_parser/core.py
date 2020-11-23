@@ -54,7 +54,6 @@ class ParameterView(web.View):
             min_items: Optional[int] = None,
             max_items: Optional[int] = None,
             choices: Optional[Iterable] = None,
-            choices_are_case_insensitive: bool = False,
             choices_mapping: Optional[Mapping] = None,
     ) -> validated_query_parameter:
         """
@@ -108,7 +107,6 @@ class ParameterView(web.View):
         :param choices: works like an enum: input parameter value is validated
             against items in specified iterable. Overrides following kwargs:
             `min_length`, `max_length`, `min_value`, `max_value`.
-        :param choices_are_case_insensitive: not implemented yet.
         :param choices_mapping: if value is validated against `choices`,
             return appropriate value according to provided mapping (usually
             a `dict`).
