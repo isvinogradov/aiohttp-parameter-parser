@@ -3,10 +3,16 @@
 [![pypi](https://img.shields.io/pypi/v/aiohttp-parameter-parser.svg)](https://pypi.python.org/pypi/aiohttp-parameter-parser)
 
 Declare and validate HTTP query and path parameters in `aiohttp` views. 
-Receive intended types instead of default `str`.  
-Currently only path and URL query parameter location are supported.
+Receive intended types instead of default `str`. Receive single parameter or an array.  
 
-### Basic usage examples:
+Currently only path and URL query parameter locations are supported.
+
+### Installation
+```bash
+pip install aiohttp-parameter-parser
+```
+
+### Basic usage examples
 ```python
 from datetime import datetime
 from typing import Optional
