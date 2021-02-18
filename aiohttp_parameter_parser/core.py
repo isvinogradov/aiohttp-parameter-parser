@@ -53,6 +53,7 @@ class ParameterView(web.View):
             max_length: Optional[int] = None,
             min_items: Optional[int] = None,
             max_items: Optional[int] = None,
+            no_tz: bool = False,
             choices: Optional[Iterable] = None,
             choices_mapping: Optional[Mapping] = None,
     ) -> validated_query_parameter:
@@ -104,6 +105,7 @@ class ParameterView(web.View):
             an array.
         :param max_items: maximum allowed array length if parameter is
             an array.
+        :param no_tz: forces `date` parameter to be offset-naive.
         :param choices: works like an enum: input parameter value is validated
             against items in specified iterable. Overrides following kwargs:
             `min_length`, `max_length`, `min_value`, `max_value`.
@@ -147,6 +149,7 @@ class ParameterView(web.View):
                 max_length=max_length,
                 min_items=min_items,
                 max_items=max_items,
+                no_tz=no_tz,
                 choices=choices,
                 choices_mapping=choices_mapping,
             )
@@ -283,6 +286,7 @@ class ParameterView(web.View):
             max_value: int = None,
             min_length: int = None,
             max_length: int = None,
+            no_tz: bool = False,
             choices: Optional[Iterable] = None,
             choices_mapping: Optional[Mapping] = None,
             **_,
@@ -309,7 +313,7 @@ class ParameterView(web.View):
         elif is_date:
             try:
                 dt = datetime.strptime(input_value, self.date_format)
-                parsed_value = self.tz.localize(dt)
+                parsed_value = dt if no_tz else self.tz.localize(dt)
             except (ValueError, TypeError):
                 raise ValidationError(
                     f"Invalid <{name_in_request}> type "
